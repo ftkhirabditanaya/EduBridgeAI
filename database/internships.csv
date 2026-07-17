@@ -1,0 +1,11 @@
+company,role,location,stipend,skills,apply_link
+Google,Software Engineering Intern,Bangalore,80000,"Python,DSA,Git",https://careers.google.com
+Microsoft,Software Engineer Intern,Hyderabad,85000,"Python,C++,DSA",https://careers.microsoft.com
+Amazon,SDE Intern,Bangalore,90000,"Java,DSA,AWS",https://amazon.jobs
+Intel,AI Research Intern,Bangalore,60000,"Python,TensorFlow",https://jobs.intel.com
+NVIDIA,Deep Learning Intern,Bangalore,75000,"Python,PyTorch",https://nvidia.com
+Bosch,Embedded Intern,Bangalore,30000,"C,C++,Embedded",https://bosch.com
+Qualcomm,AI Engineer Intern,Hyderabad,70000,"Python,ML",https://qualcomm.com
+Samsung,R&D Intern,Bangalore,50000,"Python,Java",https://research.samsung.com
+Siemens,Software Intern,Pune,40000,"Python,Git",https://siemens.com
+ISRO,Research Intern,India,0,"Python,C++,Research",https://isro.gov.in

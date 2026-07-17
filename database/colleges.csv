@@ -1,0 +1,11 @@
+college,city,state,course,fees,exam,ranking
+VIT,Vellore,Tamil Nadu,B.Tech Bioinformatics,198000,VITEEE,11
+IISER Pune,Pune,Maharashtra,BS-MS Biology,30000,IAT,8
+Manipal University,Manipal,Karnataka,B.Tech Bioinformatics,350000,MET,14
+SRM University,Chennai,Tamil Nadu,B.Tech Biotechnology,275000,SRMJEEE,22
+Amrita University,Coimbatore,Tamil Nadu,B.Tech AI,250000,AEEE,18
+IIIT Hyderabad,Hyderabad,Telangana,B.Tech CSE,300000,JEE Main,4
+BITS Pilani,Pilani,Rajasthan,B.E. CSE,500000,BITSAT,6
+IIT Madras,Chennai,Tamil Nadu,B.Tech CSE,220000,JEE Advanced,1
+NIT Trichy,Trichy,Tamil Nadu,B.Tech CSE,170000,JEE Main,9
+KIIT,Bhubaneswar,Odisha,B.Tech AI,190000,KIITEE,21

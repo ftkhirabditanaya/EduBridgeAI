@@ -1,0 +1,11 @@
+career,stream,description,required_skills,degree,future_scope,average_salary
+Software Engineer,PCM/PCB,Develop software applications,"Python,Java,C++,DSA,Git",B.Tech CSE,Very High,1200000
+AI Engineer,PCM/PCB,Build AI and ML systems,"Python,TensorFlow,PyTorch,ML",B.Tech AI,Very High,1500000
+Data Scientist,PCM/PCB,Analyze business data,"Python,Pandas,SQL,Statistics",B.Tech CSE,Very High,1400000
+Biomedical Engineer,PCB,Develop medical devices,"Biology,Electronics,Python",Biomedical Engineering,High,900000
+Bioinformatics Scientist,PCB,Analyze biological data,"Python,R,Biology,ML",Bioinformatics,High,1000000
+Cybersecurity Analyst,PCM,Protect systems from attacks,"Networking,Linux,Python",Cyber Security,Very High,1300000
+Cloud Engineer,PCM,Manage cloud infrastructure,"AWS,Docker,Kubernetes",Cloud Computing,Very High,1500000
+Robotics Engineer,PCM/PCB,Develop intelligent robots,"Python,C++,ROS",Robotics,High,1200000
+Embedded Engineer,ECE,Develop embedded systems,"C,C++,Microcontrollers",ECE,High,900000
+ML Research Engineer,PCM/PCB,Research AI models,"Python,Deep Learning",AI,Very High,1800000

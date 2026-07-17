@@ -1,0 +1,11 @@
+project,domain,difficulty,skills
+Movie Recommendation System,Machine Learning,Medium,"Python,Pandas,Scikit-Learn"
+Pneumonia Detection,Deep Learning,Hard,"Python,TensorFlow,OpenCV"
+Plant Disease Detection,Computer Vision,Medium,"Python,TensorFlow"
+Chatbot,NLP,Easy,"Python,Flask"
+AI Resume Analyzer,NLP,Hard,"Python,Streamlit"
+Fraud Detection,Machine Learning,Medium,"Python,Pandas"
+Face Recognition,Computer Vision,Hard,"Python,OpenCV"
+Stock Price Prediction,Machine Learning,Medium,"Python,LSTM"
+Gesture Controlled Drone,Robotics,Hard,"Python,OpenCV"
+Medical Image Segmentation,Deep Learning,Hard,"Python,PyTorch"

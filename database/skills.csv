@@ -1,0 +1,21 @@
+skill,category,difficulty
+Python,Programming,Easy
+Java,Programming,Medium
+C++,Programming,Hard
+SQL,Database,Easy
+Git,Development,Easy
+GitHub,Development,Easy
+TensorFlow,AI,Hard
+PyTorch,AI,Hard
+OpenCV,Computer Vision,Medium
+Pandas,Data Science,Easy
+NumPy,Data Science,Easy
+Scikit-Learn,Machine Learning,Medium
+Docker,DevOps,Medium
+AWS,Cloud,Medium
+Linux,Systems,Medium
+Flask,Web Development,Easy
+Streamlit,Web Development,Easy
+HTML,Frontend,Easy
+CSS,Frontend,Easy
+JavaScript,Frontend,Medium

@@ -1,0 +1,37 @@
+Khirabdi Tanaya Patri
+
+Email:
+khirabdi@email.com
+
+Phone:
+9876543210
+
+Education
+
+B.Tech Electronics and Communication Engineering
+Specialization in Biomedical Engineering
+VIT Vellore
+
+Skills
+
+Python
+Machine Learning
+TensorFlow
+Deep Learning
+SQL
+Git
+GitHub
+Pandas
+NumPy
+
+Projects
+
+Pneumonia Detection using DenseNet121 + CBAM
+
+Smart ECG Monitoring System
+
+Experience
+
+IEEE Robotics and Automation Society
+
+AI/ML Team Member
