@@ -1,11 +1,12 @@
-company,role,location,stipend,skills,apply_link
-Google,Software Engineering Intern,Bangalore,80000,"Python,DSA,Git",https://careers.google.com
-Microsoft,Software Engineer Intern,Hyderabad,85000,"Python,C++,DSA",https://careers.microsoft.com
-Amazon,SDE Intern,Bangalore,90000,"Java,DSA,AWS",https://amazon.jobs
-Intel,AI Research Intern,Bangalore,60000,"Python,TensorFlow",https://jobs.intel.com
-NVIDIA,Deep Learning Intern,Bangalore,75000,"Python,PyTorch",https://nvidia.com
-Bosch,Embedded Intern,Bangalore,30000,"C,C++,Embedded",https://bosch.com
-Qualcomm,AI Engineer Intern,Hyderabad,70000,"Python,ML",https://qualcomm.com
-Samsung,R&D Intern,Bangalore,50000,"Python,Java",https://research.samsung.com
-Siemens,Software Intern,Pune,40000,"Python,Git",https://siemens.com
-ISRO,Research Intern,India,0,"Python,C++,Research",https://isro.gov.in
+company,role,domain,skills,location,mode,stipend,branch,apply_link
+Google,Software Engineering Intern,AI,"Python,DSA,Machine Learning",Bangalore,Hybrid,80000,CSE/ECE,https://careers.google.com
+Microsoft,AI Intern,AI,"Python,Deep Learning,TensorFlow",Hyderabad,Hybrid,85000,CSE/ECE,https://careers.microsoft.com
+NVIDIA,Deep Learning Intern,AI,"Python,PyTorch,CNN",Bangalore,Onsite,75000,CSE/ECE,https://nvidia.com/careers
+Intel,AI Research Intern,AI,"Python,Machine Learning",Bangalore,Hybrid,70000,ECE/CSE,https://jobs.intel.com
+Bosch,Embedded Systems Intern,Embedded,"C,C++,Embedded C,Microcontrollers",Bangalore,Onsite,30000,ECE,https://bosch.com/careers
+Texas Instruments,Embedded Intern,Embedded,"Embedded C,ARM,RTOS",Bangalore,Onsite,45000,ECE,https://careers.ti.com
+Qualcomm,Embedded AI Intern,AI,"Python,C++,Deep Learning",Hyderabad,Hybrid,65000,ECE/CSE,https://qualcomm.com/careers
+ISRO,Research Intern,Research,"Signal Processing,MATLAB,Python",Bengaluru,Onsite,25000,ECE,https://isro.gov.in
+DRDO,Research Intern,Research,"Embedded Systems,C++,MATLAB",Delhi,Onsite,30000,ECE,https://drdo.gov.in
+TCS,Data Science Intern,Data Science,"Python,SQL,Pandas",Remote,Remote,35000,All,https://tcs.com/careers
+Infosys,Machine Learning Intern,AI,"Python,Machine Learning",Remote,Remote,40000,All,https://careers.infosys.com
