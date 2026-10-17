@@ -25,3 +25,18 @@ env/
 # OS files
 .DS_Store
 Thumbs.db
+
+# Uploads (user resumes)
+uploads/*
+!uploads/.gitkeep
+
+# Streamlit
+.streamlit/secrets.toml
+
+# IDE
+.idea/
+
+# Build
+dist/
+build/
+*.egg-info/

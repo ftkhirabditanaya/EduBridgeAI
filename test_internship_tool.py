@@ -9,23 +9,40 @@ while True:
 
     internships = search_internships(query)
 
-    print("\nResults\n")
-
     if not internships:
-        print("No internships found.")
+        print("\nNo internships found.")
         continue
+
+    print("\nRecommended Internships\n")
 
     for i, job in enumerate(internships, start=1):
 
-        print("=" * 50)
+        print("=" * 65)
 
-        print(f"{i}. {job['company']}")
+        print(f"#{i} {job['company']}")
+        print(job["role"])
 
-        print("Role      :", job["role"])
-        print("Domain    :", job["domain"])
-        print("Location  :", job["location"])
-        print("Mode      :", job["mode"])
-        print("Stipend   : ₹", job["stipend"])
-        print("Branch    :", job["branch"])
-        print("Skills    :", job["skills"])
-        print("Apply Link:", job["apply_link"])
+        print("\n⭐ Match Score :", job["match_score"], "%")
+
+        print("\nWhy Recommended")
+
+        if job["reasons"]:
+            for reason in job["reasons"]:
+                print(reason)
+        else:
+            print("No specific match found.")
+
+        if job["missing"]:
+            print("\nMissing Criteria")
+
+            for item in job["missing"]:
+                print("•", item)
+
+        print("\nLocation :", job["location"])
+        print("Mode     :", job["mode"])
+        print("Branch   :", job["branch"])
+        print("Stipend  : ₹", job["stipend"])
+        print("Skills   :", job["skills"])
+        print("Apply    :", job["apply_link"])
+
+        print("=" * 65)

@@ -1,110 +1,101 @@
-#  EduBridge AI
+# 🎓 EduBridge AI
 
 > An AI-powered educational guidance platform built using **Google Agent Development Kit (ADK)** and **Gemini 2.5 Flash**.
 
-EduBridge AI is a multi-agent educational assistant that helps students make informed decisions about their careers, colleges, scholarships, and study plans through intelligent AI agents.
+EduBridge AI is a multi-agent educational assistant that helps students make informed decisions about their careers, colleges, scholarships, internships, and study plans through intelligent AI agents.
 
 ---
 
-#  Features
+## ✨ Features
 
-*  Career Guidance
-*  College Recommendations
-*  Scholarship Assistance
-*  Personalized Study Planning
-*  Multi-Agent Architecture using Google ADK
-*  Powered by Gemini 2.5 Flash
-
----
-
-#  Project Architecture
-
-```
-                    User
-                      │
-                      ▼
-         EduBridge Coordinator Agent
-                      │
-      ┌───────────────┼────────────────┐
-      │               │                │
-      ▼               ▼                ▼
-Career Agent    College Agent   Scholarship Agent
-                      │
-                      ▼
-              Study Planner Agent
-```
-
-The coordinator agent understands the user's request and delegates it to the most suitable specialist agent.
+- 🧭 **Career Guidance** — AI-powered career path recommendations
+- 🏫 **College Recommendations** — Find colleges with fees, rankings, and entrance exams
+- 🏆 **Scholarship Assistance** — Search scholarships by eligibility
+- 📚 **Personalized Study Planning** — Daily schedules and roadmaps
+- 🎯 **Internship Hub** — Smart internship search with recommendation engine
+- 📄 **Resume Analyzer** — ATS scoring, skill extraction, and improvement suggestions
+- 📊 **ATS Scoring** — Applicant Tracking System compatibility analysis
+- 🎤 **Interview Preparation** — Mock interview questions and tips
+- 💡 **Project Mentor** — Portfolio project ideas for resume building
+- 🧠 **Multi-Agent Architecture** — 9 specialist agents coordinated by AI
 
 ---
 
-#  Project Structure
+## 🏗️ Architecture
 
 ```
-EduBridgeAI/
-│
-├── edubridge/
-│   ├── __init__.py
-│   ├── agent.py
-│   ├── career_agent.py
-│   ├── college_agent.py
-│   ├── scholarship_agent.py
-│   └── study_planner_agent.py
-│
-├── app.py
-├── README.md
-├── .gitignore
-└── .env
+                        Student
+                          │
+                          ▼
+            EduBridge Coordinator Agent
+                          │
+     ┌────────────────────┼────────────────────┐
+     │        │       │       │        │        │
+     ▼        ▼       ▼       ▼        ▼        ▼
+  Career   College  Scholar  Study   Intern   Resume
+  Agent    Agent    Agent    Planner  Agent    Agent
+                                       │
+                              ┌────────┼────────┐
+                              ▼        ▼        ▼
+                            ATS    Interview  Project
+                           Agent    Agent     Mentor
 ```
 
 ---
 
-#  Tech Stack
+## 🖥️ Tech Stack
 
-| Technology       | Purpose               |
-| ---------------- | --------------------- |
-| Python           | Programming Language  |
-| Google ADK       | Multi-Agent Framework |
-| Gemini 2.5 Flash | Large Language Model  |
-| Git              | Version Control       |
-| GitHub           | Code Hosting          |
+| Technology           | Purpose                  |
+| -------------------- | ------------------------ |
+| Python               | Programming Language     |
+| Google ADK           | Multi-Agent Framework    |
+| Gemini 2.5 Flash     | Large Language Model     |
+| Streamlit            | Web Interface            |
+| Plotly               | Interactive Charts       |
+| Pandas               | Data Processing          |
+| Git/GitHub           | Version Control          |
 
 ---
 
-#  Installation
+## 🚀 Installation
 
-Clone the repository
+Clone the repository:
 
 ```bash
 git clone https://github.com/ftkhirabditanaya/EduBridgeAI.git
-```
-
-Move into the project
-
-```bash
 cd EduBridgeAI
 ```
 
-Install dependencies
+Install dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Create a `.env` file
+Create a `.env` file:
 
 ```text
 GOOGLE_API_KEY=YOUR_API_KEY
 GOOGLE_GENAI_USE_VERTEXAI=FALSE
 ```
 
-Run the agent
+---
+
+## ▶️ Running
+
+### Streamlit Web Interface
 
 ```bash
-adk run edubridge
+streamlit run streamlit_app.py
 ```
 
-or launch the web interface
+### Via ADK
+
+```bash
+adk run agents
+```
+
+### Via ADK Web
 
 ```bash
 adk web
@@ -112,80 +103,113 @@ adk web
 
 ---
 
-#  Example Queries
+## 📸 Screenshots
 
-Career Guidance
+The web interface features a **light blue pastel & cream** theme with:
+
+- Glassmorphism panels and gradient headers
+- Interactive Plotly charts for salary, fees, and stipend comparisons
+- Card-based layouts with hover animations
+- AI-powered chat with the EduBridge coordinator
+- Resume upload with ATS scoring gauges
+
+---
+
+## 📂 Project Structure
 
 ```
-I am a PCB student interested in AI.
+EduBridgeAI/
+├── agents/
+│   ├── __init__.py
+│   ├── agent.py                  # Coordinator (root agent)
+│   ├── career_agent.py           # Career guidance specialist
+│   ├── college_agent.py          # College recommendations
+│   ├── scholarship_agent.py      # Scholarship search
+│   ├── study_planner_agent.py    # Study planning
+│   ├── internship_agent.py       # Internship recommendations
+│   ├── resume_agent.py           # Resume analysis
+│   ├── ats_agent.py              # ATS scoring
+│   ├── interview_agent.py        # Interview preparation
+│   └── project_mentor_agent.py   # Project mentorship
+│
+├── tools/
+│   ├── __init__.py
+│   ├── career_tool.py            # Career database search
+│   ├── college_tool.py           # College database search
+│   ├── scholarship_tool.py       # Scholarship database search
+│   ├── internship_tool.py        # Internship search engine
+│   ├── resume_parser.py          # PDF/DOCX/TXT extraction
+│   ├── resume_analyzer.py        # Skill & experience extraction
+│   ├── ats_scorer.py             # ATS compatibility scoring
+│   ├── query_parser.py           # NL query to structured filters
+│   ├── normalizer.py             # Filter value normalization
+│   ├── recommendation_engine.py  # Match score calculation
+│   └── recommendation_resume.py  # Resume-based recommendations
+│
+├── database/
+│   ├── careers.csv
+│   ├── colleges.csv
+│   ├── internships.csv
+│   ├── scholarships.csv
+│   ├── projects.csv
+│   └── skills.csv
+│
+├── assets/
+│   ├── styles.css                # Custom CSS theme
+│   └── logo.png
+│
+├── .streamlit/
+│   └── config.toml               # Streamlit theme configuration
+│
+├── streamlit_app.py              # Main Streamlit frontend
+├── app.py                        # Application entry point
+├── requirements.txt              # Python dependencies
+├── .env                          # API keys (not tracked)
+├── .gitignore
+└── README.md
 ```
 
-College Recommendation
+---
 
+## 💬 Example Queries
+
+**Career Guidance:**
+```
+I am a PCB student interested in AI. What careers can I pursue?
+```
+
+**College Recommendation:**
 ```
 Suggest Bioinformatics colleges in India.
 ```
 
-Scholarships
-
+**Scholarships:**
 ```
-Find scholarships for Biotechnology students.
+Find scholarships for Engineering students.
 ```
 
-Study Planning
-
+**Study Planning:**
 ```
 Create a 3-month roadmap for learning Machine Learning.
 ```
 
----
-
-#  Current Status
-
-Current Version
-
-*  Multi-Agent System
-*  Coordinator Agent
-*  Career Agent
-*  College Agent
-*  Scholarship Agent
-*  Study Planner Agent
-*  GitHub Integration
+**Interview Prep:**
+```
+How do I prepare for a Google software engineering interview?
+```
 
 ---
 
-#  Upcoming Features
-
-* SQLite Memory
-* College Database Search
-* Scholarship Database
-* Tool Calling
-* Streamlit Web Interface
-* PDF Study Planner
-* Resume Analyzer
-* Career Roadmap Generator
-* RAG-based Knowledge Base
-
----
-
-#  Contributing
-
-Contributions, suggestions, and improvements are welcome.
-
-Feel free to fork the repository and submit a pull request.
-
----
-
-# License
-
-This project is licensed under the MIT License.
-
----
-
-# Author
+## 👩‍💻 Author
 
 **Khirabdi Tanaya**
 
 Second-year Electronics and Communication Engineering student specializing in Biomedical Engineering.
 
 Interested in Artificial Intelligence, Software Engineering, and Educational Technology.
+
+---
+
+## 📝 License
+
+This project is licensed under the MIT License.
