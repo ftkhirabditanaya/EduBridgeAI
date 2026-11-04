@@ -1,9 +1,9 @@
 """Explainable student pathway planning from EduBridge's local catalogs."""
 
+import csv
 import math
 import os
 import re
-import csv
 
 
 DATABASE_DIR = os.path.join(os.path.dirname(__file__), "..", "database")
@@ -142,6 +142,7 @@ def _rank_funding(career, education_stage, scholarships):
     career_text = _normalize(
         " ".join(str(career.get(field, "")) for field in ("career", "degree", "stream"))
     )
+    degree = _normalize(career.get("degree", ""))
     stage = _normalize(education_stage)
     ranked = []
 
@@ -150,19 +151,22 @@ def _rank_funding(career, education_stage, scholarships):
         normalized_eligibility = _normalize(eligibility)
         reasons = []
 
-        if "engineering" in normalized_eligibility and "engineering" in career_text:
-            reasons.append("eligibility mentions engineering")
+        degree_is_engineering = (
+            "engineering" in career_text
+            or "b tech" in degree
+            or "b e " in f" {degree} "
+        )
+        if "engineering" in normalized_eligibility and degree_is_engineering:
+            reasons.append("listed degree aligns with engineering eligibility")
         if (
             ("ug" in normalized_eligibility or "undergraduate" in normalized_eligibility)
             and ("undergraduate" in stage or "college" in stage)
         ):
             reasons.append("eligibility mentions undergraduate study")
-        if "merit" in normalized_eligibility:
-            reasons.append("merit-based criteria may apply")
         if "technical" in normalized_eligibility and (
-            "engineering" in career_text or "technical" in career_text
+            degree_is_engineering or "technical" in career_text
         ):
-            reasons.append("eligibility mentions technical education")
+            reasons.append("listed degree aligns with technical education eligibility")
 
         amount = scholarship.get("amount", 0)
         try:
@@ -179,7 +183,7 @@ def _rank_funding(career, education_stage, scholarships):
             "eligibility": item.get("eligibility", ""),
             "amount": int(float(item.get("amount", 0) or 0)),
             "deadline": item.get("last_date", ""),
-            "fit": "Potential fit" if reasons else "Review eligibility",
+            "fit": "Potential catalog alignment" if reasons else "Review eligibility",
             "reason": "; ".join(reasons) or (
                 "The local catalog has no verified profile match; review the criteria."
             ),
@@ -243,14 +247,24 @@ def create_pathway_plan(
         required_skills, current_skills, internships, location
     )
     funding = _rank_funding(career, education_stage, scholarships)
+    budget_guidance = (
+        "No paid learning resources are assumed; start with free documentation, open course "
+        "materials, and practice projects."
+        if monthly_budget == 0 else
+        f"Treat ₹{monthly_budget:,} per month as a spending cap; start with free resources "
+        "and spend only where it meaningfully helps."
+    )
 
     milestones = [
         {
             "title": "Close the highest-priority skill gaps",
             "timeframe": f"Weeks 1-{max(1, min(months * 2, minimum_months * 2))}",
             "action": (
-                f"Study {', '.join(gaps)} in this order."
-                if gaps else "Refresh your existing skills and document evidence for each one."
+                f"Study {', '.join(gaps)} in this order. {budget_guidance}"
+                if gaps else (
+                    "Refresh your existing skills and document evidence for each one. "
+                    f"{budget_guidance}"
+                )
             ),
             "deliverable": (
                 "A small practice artifact or notes for each skill, reviewed against the "
@@ -317,10 +331,12 @@ def create_pathway_plan(
         "internships": internship_matches,
         "funding": funding,
         "milestones": milestones,
+        "budget_guidance": budget_guidance,
         "explanation": [
             "Career requirements and opportunity leads come from EduBridge's local CSV catalogs.",
             "Skill gaps use case-insensitive exact matching against the selected career's required skills.",
             "Effort estimates use 6/12/20 learning hours per missing easy/medium/hard skill, plus project time.",
+            "The budget is treated as a spending cap; the planner does not claim paid resources are required.",
             "Funding leads are possible leads, not confirmed eligibility; check official program rules and dates.",
         ],
     }

@@ -70,8 +70,9 @@ class PathwayPlannerTests(unittest.TestCase):
         self.assertEqual(plan["project"]["name"], "AI Portfolio Demo")
         self.assertEqual(plan["internships"][0]["company"], "Example Labs")
         self.assertIn("preferred location", plan["internships"][0]["reason"])
-        self.assertEqual(plan["funding"][0]["fit"], "Potential fit")
+        self.assertEqual(plan["funding"][0]["fit"], "Potential catalog alignment")
         self.assertEqual(plan["funding"][0]["amount"], 50000)
+        self.assertIn("spending cap", plan["budget_guidance"])
 
     def test_marks_unrealistic_timeline_without_hiding_estimate(self):
         plan = self.plan(weekly_hours=1, months=1)

@@ -10,6 +10,8 @@ import time
 import plotly.graph_objects as go
 import plotly.express as px
 
+from tools.pathway_planner_tool import create_pathway_plan
+
 # ============================================
 # Page Configuration
 # ============================================
@@ -134,6 +136,7 @@ with st.sidebar:
         [
             "🏠  Home",
             "💬  AI Chat",
+            "🗺️  Pathway Planner",
             "🧭  Career Explorer",
             "🏫  College Finder",
             "🎯  Internship Hub",
@@ -434,6 +437,270 @@ _Error: {str(e)}_"""
             if st.button(f"💬 {q[:45]}...", key=f"qq_{i}", use_container_width=True):
                 st.session_state.chat_messages.append({"role": "user", "content": q})
                 st.rerun()
+
+
+# ============================================
+# PAGE: Pathway Planner
+# ============================================
+
+elif page == "🗺️  Pathway Planner":
+
+    st.markdown("""
+    <div class="hero-container fade-in" style="padding: 1rem 0;">
+        <div class="hero-title" style="font-size: 2rem;">🗺️ Pathway Planner</div>
+        <div class="hero-subtitle" style="font-size: 0.95rem;">
+            Turn a career goal, the skills you already have, and your real-world constraints
+            into an explainable plan with milestones, projects, opportunities, and funding leads.
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    st.markdown("<div class='section-divider'></div>", unsafe_allow_html=True)
+    st.info(
+        "Plans are grounded in EduBridge's local catalog data. They are starting points, "
+        "not admissions, job, or funding guarantees."
+    )
+
+    career_data = load_csv("careers.csv")
+    skill_data = load_csv("skills.csv")
+    if career_data.empty or "career" not in career_data.columns:
+        st.error("Career catalog is missing or invalid; the pathway planner cannot run.")
+    else:
+        careers = sorted(career_data["career"].dropna().astype(str).unique().tolist())
+        catalog_skills = (
+            skill_data["skill"].dropna().astype(str).tolist()
+            if not skill_data.empty and "skill" in skill_data.columns else []
+        )
+
+        with st.form("pathway_planner_form"):
+            st.markdown("### 1. Set your direction")
+            goal = st.selectbox("Career goal", careers)
+            education_stage = st.selectbox(
+                "Current education stage",
+                ["Secondary school", "Undergraduate", "Graduate", "Other"],
+            )
+            streams = ["Not specified"]
+            if "stream" in career_data.columns:
+                streams += sorted(
+                    career_data["stream"].dropna().astype(str).unique().tolist()
+                )
+            stream = st.selectbox("Academic stream (optional)", streams)
+
+            goal_row = career_data[career_data["career"].astype(str) == goal].iloc[0]
+            required_skills = [
+                skill.strip()
+                for skill in str(goal_row.get("required_skills", "")).split(",")
+                if skill.strip()
+            ]
+            skill_options = sorted(set(catalog_skills + required_skills), key=str.lower)
+            current_skills = st.multiselect(
+                "Skills you already have",
+                skill_options,
+                help="Select only skills you can currently use; gaps are derived from the career catalog.",
+            )
+
+            st.markdown("### 2. Add your constraints")
+            left, middle, right = st.columns(3)
+            with left:
+                weekly_hours = st.slider(
+                    "Study hours per week", min_value=1, max_value=40, value=6
+                )
+            with middle:
+                monthly_budget = st.number_input(
+                    "Learning budget per month (₹)",
+                    min_value=0,
+                    max_value=100000,
+                    value=0,
+                    step=500,
+                )
+            with right:
+                months = st.slider("Planning horizon (months)", 1, 24, 6)
+            location = st.text_input(
+                "Preferred internship location (optional)",
+                placeholder="e.g., Bengaluru or Remote",
+            )
+            submitted = st.form_submit_button(
+                "Build my pathway", type="primary", use_container_width=True
+            )
+
+        if submitted:
+            try:
+                plan = create_pathway_plan(
+                    goal=goal,
+                    current_skills=current_skills,
+                    education_stage=education_stage,
+                    weekly_hours=weekly_hours,
+                    monthly_budget=monthly_budget,
+                    months=months,
+                    stream="" if stream == "Not specified" else stream,
+                    location=location.strip(),
+                )
+                st.session_state["pathway_plan"] = plan
+            except (ValueError, FileNotFoundError) as error:
+                st.error(f"Could not build the pathway: {error}")
+                st.session_state.pop("pathway_plan", None)
+
+        plan = st.session_state.get("pathway_plan")
+        if plan:
+            st.markdown("<div class='section-divider'></div>", unsafe_allow_html=True)
+            st.markdown(f"## Your path to {plan['goal']}")
+            metrics = st.columns(3)
+            metrics[0].metric("Catalog skill gaps", len(plan["skills"]["gaps"]))
+            metrics[1].metric(
+                "Estimated focused hours", plan["effort"]["estimated_hours"]
+            )
+            metrics[2].metric(
+                "Minimum months at this pace",
+                plan["effort"]["minimum_months_at_current_pace"],
+            )
+
+            if plan["effort"]["timeline_fits"]:
+                st.success(
+                    f"Your {plan['constraints']['months']}-month horizon provides "
+                    f"{plan['effort']['available_hours']} study hours at "
+                    f"{plan['constraints']['weekly_hours']} hours per week."
+                )
+            else:
+                st.warning(
+                    f"This timeline may be ambitious: the plan estimates "
+                    f"{plan['effort']['estimated_hours']} focused hours, while your "
+                    f"current schedule provides {plan['effort']['available_hours']}. "
+                    f"Consider extending the horizon to about "
+                    f"{plan['effort']['minimum_months_at_current_pace']} months or adding study time."
+                )
+
+            st.markdown("### Why this pathway")
+            st.write(
+                f"EduBridge's **{plan['career'].get('degree', 'listed degree')}** career "
+                f"catalog entry requires: {', '.join(plan['skills']['required']) or 'no skills listed'}."
+            )
+            st.write(
+                f"Already covered: {', '.join(plan['skills']['already_have']) or 'none selected'}. "
+                f"Priority gaps: {', '.join(plan['skills']['gaps']) or 'none from the catalog'}."
+            )
+            st.caption(
+                f"Profile used: {plan['constraints']['education_stage']}; "
+                f"{plan['constraints']['weekly_hours']} study hours/week; "
+                f"₹{plan['constraints']['monthly_budget']:,}/month; "
+                f"{plan['constraints']['months']} months."
+            )
+            st.caption(f"Budget approach: {plan['budget_guidance']}")
+
+            st.markdown("### Milestones")
+            for index, milestone in enumerate(plan["milestones"], start=1):
+                with st.container(border=True):
+                    st.markdown(
+                        f"**{index}. {milestone['title']}** · {milestone['timeframe']}"
+                    )
+                    st.write(milestone["action"])
+                    st.caption(f"Deliverable: {milestone['deliverable']}")
+                    st.caption(f"Why: {milestone['rationale']}")
+
+            st.markdown("### Portfolio project")
+            if plan["project"]:
+                st.write(
+                    f"**{plan['project']['name']}** · {plan['project']['domain']} · "
+                    f"{plan['project']['difficulty']}"
+                )
+                st.write(
+                    f"Skills it demonstrates: {', '.join(plan['project']['matched_skills']) or 'career-adjacent practice'}."
+                )
+                st.caption(plan["project"]["reason"])
+            else:
+                st.info("No project entries are currently available in the local catalog.")
+
+            st.markdown("### Internship leads")
+            if plan["internships"]:
+                for opportunity in plan["internships"]:
+                    with st.container(border=True):
+                        stipend = opportunity["stipend"]
+                        st.markdown(
+                            f"**{opportunity['role']} — {opportunity['company']}** "
+                            f"· {opportunity['location']}"
+                        )
+                        st.write(
+                            f"Catalog skill overlap: {opportunity['match_score']}% "
+                            f"({', '.join(opportunity['matched_skills']) or 'no direct overlap'}). "
+                            f"Skills still to build: "
+                            f"{', '.join(opportunity['skills_to_build']) or 'none listed'}."
+                        )
+                        if stipend != "":
+                            st.caption(f"Catalog stipend: ₹{float(stipend):,.0f}")
+                        if opportunity["apply_link"]:
+                            st.link_button(
+                                f"View {opportunity['company']} opportunity",
+                                opportunity["apply_link"],
+                            )
+                        st.caption(f"Match reason: {opportunity['reason']}")
+            else:
+                st.info("No internship entries are currently available in the local catalog.")
+
+            st.markdown("### Funding leads to verify")
+            st.caption(
+                "These are catalog-based leads, not confirmed eligibility. Check each provider's "
+                "official rules and current application date before relying on an award."
+            )
+            if plan["funding"]:
+                funding_table = pd.DataFrame([
+                    {
+                        "Program": item["name"],
+                        "Amount (₹)": item["amount"],
+                        "Listed eligibility": item["eligibility"],
+                        "Catalog deadline": item["deadline"],
+                        "Planner signal": item["fit"],
+                        "Why shown": item["reason"],
+                    }
+                    for item in plan["funding"]
+                ])
+                st.dataframe(funding_table, use_container_width=True, hide_index=True)
+            else:
+                st.info("No funding entries are currently available in the local catalog.")
+
+            st.markdown("### How recommendations are calculated")
+            for explanation in plan["explanation"]:
+                st.write(f"- {explanation}")
+
+            markdown_lines = [
+                f"# Pathway to {plan['goal']}",
+                "",
+                f"- Education stage: {plan['constraints']['education_stage']}",
+                f"- Study time: {plan['constraints']['weekly_hours']} hours/week",
+                f"- Learning budget: ₹{plan['constraints']['monthly_budget']:,}/month",
+                f"- Budget approach: {plan['budget_guidance']}",
+                f"- Planning horizon: {plan['constraints']['months']} months",
+                f"- Estimated effort: {plan['effort']['estimated_hours']} hours",
+                "",
+                "## Skill gaps",
+                *(
+                    [f"- {skill}" for skill in plan["skills"]["gaps"]]
+                    or ["- No catalog gaps identified"]
+                ),
+                "",
+                "## Milestones",
+            ]
+            for milestone in plan["milestones"]:
+                markdown_lines.extend([
+                    f"### {milestone['title']} ({milestone['timeframe']})",
+                    milestone["action"],
+                    f"Deliverable: {milestone['deliverable']}",
+                    f"Why: {milestone['rationale']}",
+                    "",
+                ])
+            markdown_lines.extend([
+                "## Funding leads (verify with providers)",
+                *[
+                    f"- {item['name']}: ₹{item['amount']:,}; {item['eligibility']}; "
+                    f"listed deadline: {item['deadline']}; {item['fit']}."
+                    for item in plan["funding"]
+                ],
+                "",
+                "Recommendations are derived from EduBridge's local catalogs and are not guarantees.",
+            ])
+            st.download_button(
+                "Download my roadmap",
+                data="\n".join(markdown_lines),
+                file_name="edubridge-pathway-roadmap.md",
+                mime="text/markdown",
+            )
 
 
 # ============================================

@@ -50,6 +50,9 @@ Routing rules:
 
 - If the student asks about study plans, roadmaps, or learning schedules,
   delegate to the Study Planner Agent.
+- If the student wants an end-to-end career roadmap connecting a goal, current
+  skills, available study time, budget, and funding, delegate to the Study
+  Planner Agent.
 
 - If the student asks about internships, skills, or job readiness,
   delegate to the Internship Agent.
