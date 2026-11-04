@@ -18,6 +18,7 @@ EduBridge AI solves the problem of fragmented educational counseling by bringing
 - **Academic Institution Discovery**: Multi-parameter search across accredited universities, covering admission requirements, fee structures, national rankings, and entrance examinations.
 - **Financial Aid & Scholarship Search**: Automated matching of candidates against eligibility criteria for institutional, governmental, and private scholarships.
 - **Personalized Academic Roadmaps**: Structured milestone generation providing daily study schedules, curriculum pacing, and skill progression tracking.
+- **Explainable Pathway Planner**: Connects a selected career goal, current skills, study time, monthly budget, and optional location to a skill-gap plan, portfolio project, internship leads, and funding options.
 - **Internship Matching System**: Weighted multi-factor recommendation engine scoring opportunities against user competencies, academic disciplines, and location preferences.
 - **ATS Resume Parser & Diagnostics**: Ingestion of PDF, DOCX, and text resumes with structural parsing, keyword density evaluation, format compliance checking, and quantifiable scoring.
 - **Technical Interview Simulation**: Dynamic generation of role-specific technical and behavioral questions accompanied by evaluation criteria and model answers.
@@ -61,7 +62,7 @@ EduBridge AI implements a hierarchical multi-agent pattern orchestrated through 
 | **Career Agent** | Career trajectory and specialization analysis | `career_tool.py`, Database Registry |
 | **College Agent** | University comparisons, entrance cutoffs, and fees | `college_tool.py` |
 | **Scholarship Agent** | Financial aid eligibility verification | `scholarship_tool.py` |
-| **Study Planner Agent** | Time-bound study roadmap synthesis | Dynamic Curriculum Generator |
+| **Study Planner Agent** | Study schedules and explainable career pathways | `pathway_planner_tool.py`, local career and opportunity catalogs |
 | **Internship Agent** | Opportunity ranking and match scoring | `internship_tool.py`, `recommendation_engine.py` |
 | **Resume Agent** | Text extraction, entity recognition, and section parsing | `resume_parser.py`, `resume_analyzer.py` |
 | **ATS Agent** | Algorithmic Applicant Tracking System scoring | `ats_scorer.py` |
@@ -113,6 +114,7 @@ EduBridgeAI/
 │   ├── query_parser.py           # Natural language to structured query filter
 │   ├── normalizer.py             # Entity and filter normalization
 │   ├── recommendation_engine.py  # Multi-factor similarity scoring
+│   ├── pathway_planner_tool.py   # Explainable skills-to-career roadmap
 │   └── recommendation_resume.py  # Profile-to-internship matching
 │
 ├── database/
@@ -227,6 +229,22 @@ adk web
 
 ---
 
+## Explainable Pathway Planner
+
+Open **Pathway Planner** from the Streamlit sidebar and provide a career goal, education stage, current skills, weekly study hours, monthly learning budget, planning horizon, and optionally an internship location. The planner builds a roadmap from the existing `careers.csv`, `skills.csv`, `projects.csv`, `internships.csv`, and `scholarships.csv` catalogs. The same planning tool is available to the Study Planner Agent for integrated roadmap requests.
+
+Recommendations are intentionally inspectable:
+
+- Skill gaps are the selected career's catalog requirements not selected as current skills, compared without regard to letter case and ordered by the skill catalog's difficulty.
+- Estimated effort assigns 6, 12, or 20 focused hours to each missing easy, medium, or hard skill, then adds a project allowance (24 hours when there are gaps, otherwise 12). Available time is estimated as four weeks per month; the UI flags a mismatch instead of hiding an ambitious timeline.
+- The project is selected for overlap with the career's required skills. Internship leads are ranked by skill overlap, then optional location preference, and show skills to build and source links.
+- Funding options are local catalog leads. The planner shows its catalog-alignment signal and stated eligibility, but does not confirm personal eligibility or current award availability. Students should verify criteria and deadlines with each provider.
+- The monthly budget is treated as a spending cap. The planner does not assume paid resources are required and recommends free learning materials first.
+
+The roadmap can be downloaded from the planner page. All estimates are heuristics based on the bundled datasets; they are not guarantees of admission, employment, scholarship eligibility, or learning time.
+
+---
+
 ## Example Usage
 
 ### Career Guidance Inquiries
@@ -249,6 +267,11 @@ adk web
 "Construct a comprehensive 12-week study schedule for transitioning from Python fundamentals to Deep Learning."
 ```
 
+### Integrated Career Pathway
+```text
+"I want to become an AI Engineer. I know Python, can study 6 hours a week, and need to keep learning costs at zero. Build a realistic roadmap and show relevant projects, internships, and funding leads."
+```
+
 ### Interview Preparation Inquiries
 ```text
 "Generate five technical interview questions focused on distributed systems and system design for a Mid-Level Software Engineer role."
@@ -269,6 +292,9 @@ python test_resume_recommendation.py
 
 # Verify similarity scoring calculations
 python test_recommendation_engine.py
+
+# Verify explainable pathway planning and its catalog recommendations
+python -m unittest test_pathway_planner -v
 ```
 
 ---
