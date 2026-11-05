@@ -78,7 +78,7 @@ EduBridge AI implements a hierarchical multi-agent pattern orchestrated through 
 | **Core Runtime** | Python 3.10+ | Primary language environment |
 | **Agent Framework** | Google Agent Development Kit (ADK) | Multi-agent coordination and lifecycle management |
 | **Language Model** | Gemini 2.5 Flash | High-throughput, low-latency reasoning and evaluation |
-| **Web Presentation** | Streamlit | Responsive dashboard with light pastel theme |
+| **Web Presentation** | Streamlit | Responsive glass-panel dashboard with butter-yellow and pastel-green accents |
 | **Data Visualization** | Plotly | Interactive financial, salary, and score distribution charts |
 | **Document Processing**| pdfplumber, python-docx | Extraction of unstructured resume files |
 | **Data Engine** | Pandas, NumPy | Structured tabular queries and weighted match matrices |

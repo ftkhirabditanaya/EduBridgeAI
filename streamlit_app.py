@@ -1,7 +1,4 @@
-"""
-EduBridge AI — Streamlit Frontend
-Light Blue Pastel & Cream Theme
-"""
+"""EduBridge AI — Streamlit education guidance frontend."""
 
 import streamlit as st
 import pandas as pd
@@ -18,7 +15,6 @@ from tools.pathway_planner_tool import create_pathway_plan
 
 st.set_page_config(
     page_title="EduBridge AI — Your AI Education Guide",
-    page_icon="🎓",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -33,14 +29,14 @@ def load_css():
         os.path.dirname(__file__), "assets", "styles.css"
     )
     if os.path.exists(css_path):
-        with open(css_path, "r") as f:
+        with open(css_path, "r", encoding="utf-8") as f:
             st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
 load_css()
 
 # Inject Google Fonts
 st.markdown("""
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 """, unsafe_allow_html=True)
 
 
@@ -65,27 +61,27 @@ def load_csv(filename):
 
 def render_score_gauge(score, title="ATS Score"):
     if score >= 70:
-        color = "#34d399"
+        color = "#43835c"
     elif score >= 40:
-        color = "#fbbf24"
+        color = "#98792d"
     else:
-        color = "#f87171"
+        color = "#a64e4a"
 
     fig = go.Figure(go.Indicator(
         mode="gauge+number",
         value=score,
-        title={"text": title, "font": {"family": "Outfit", "size": 18, "color": "#374151"}},
-        number={"font": {"family": "Outfit", "size": 48, "color": "#265ea3"}},
+        title={"text": title, "font": {"family": "Space Grotesk", "size": 18, "color": "#526553"}},
+        number={"font": {"family": "Space Grotesk", "size": 48, "color": "#456b4b"}},
         gauge={
-            "axis": {"range": [0, 100], "tickwidth": 1, "tickcolor": "#b8daff"},
+            "axis": {"range": [0, 100], "tickwidth": 1, "tickcolor": "#82907d"},
             "bar": {"color": color, "thickness": 0.3},
-            "bgcolor": "#f0f7ff",
+            "bgcolor": "#e9eee3",
             "borderwidth": 2,
-            "bordercolor": "#b8daff",
+            "bordercolor": "#cbd8c3",
             "steps": [
-                {"range": [0, 40], "color": "#fef2f2"},
-                {"range": [40, 70], "color": "#fefce8"},
-                {"range": [70, 100], "color": "#ecfdf5"},
+                {"range": [0, 40], "color": "#f0dfda"},
+                {"range": [40, 70], "color": "#f4ebcb"},
+                {"range": [70, 100], "color": "#dce9dc"},
             ],
         }
     ))
@@ -93,7 +89,26 @@ def render_score_gauge(score, title="ATS Score"):
         height=250,
         margin=dict(l=30, r=30, t=60, b=10),
         paper_bgcolor="rgba(0,0,0,0)",
-        font={"family": "Inter"},
+        font={"family": "DM Sans", "color": "#526553"},
+    )
+    return fig
+
+
+def style_chart(fig):
+    fig.update_layout(
+        font={"family": "DM Sans", "color": "#526553"},
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        xaxis={
+            "color": "#526553",
+            "gridcolor": "#dfe7d8",
+            "zerolinecolor": "#c6d3bf",
+        },
+        yaxis={
+            "color": "#526553",
+            "gridcolor": "#dfe7d8",
+            "zerolinecolor": "#c6d3bf",
+        },
     )
     return fig
 
@@ -102,10 +117,9 @@ def render_score_gauge(score, title="ATS Score"):
 # Helper: Render Feature Card HTML
 # ============================================
 
-def feature_card(icon, title, desc):
+def feature_card(title, desc):
     return f"""
     <div class="feature-card fade-in">
-        <span class="feature-icon">{icon}</span>
         <div class="feature-title">{title}</div>
         <div class="feature-desc">{desc}</div>
     </div>
@@ -119,11 +133,11 @@ def feature_card(icon, title, desc):
 with st.sidebar:
     st.markdown("""
     <div style="text-align: center; padding: 1rem 0;">
-        <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🎓</div>
-        <div style="font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.4rem; color: #265ea3; letter-spacing: -0.02em;">
+        <div class="brand-mark">E</div>
+        <div class="brand-name">
             EduBridge AI
         </div>
-        <div style="font-family: 'Inter', sans-serif; font-size: 0.78rem; color: #9aa0ae; margin-top: 0.25rem;">
+        <div class="brand-caption">
             AI-Powered Education Guide
         </div>
     </div>
@@ -134,16 +148,16 @@ with st.sidebar:
     page = st.radio(
         "Navigate",
         [
-            "🏠  Home",
-            "💬  AI Chat",
-            "🗺️  Pathway Planner",
-            "🧭  Career Explorer",
-            "🏫  College Finder",
-            "🎯  Internship Hub",
-            "🏆  Scholarships",
-            "📄  Resume Analyzer",
-            "💡  Project Ideas",
-            "📊  Skills Dashboard",
+            "Home",
+            "AI Chat",
+            "Pathway Planner",
+            "Career Explorer",
+            "College Finder",
+            "Internship Hub",
+            "Scholarships",
+            "Resume Analyzer",
+            "Project Ideas",
+            "Skills Dashboard",
         ],
         label_visibility="collapsed",
     )
@@ -151,18 +165,8 @@ with st.sidebar:
     st.markdown("---")
 
     st.markdown("""
-    <div style="padding: 0.75rem; background: linear-gradient(135deg, rgba(224,239,255,0.5), rgba(254,249,238,0.5)); border-radius: 12px; border: 1px solid #b8daff;">
-        <div style="font-family: 'Inter', sans-serif; font-size: 0.78rem; color: #6b7280; line-height: 1.6;">
-            <span class="live-dot"></span> <strong style="color: #265ea3;">Powered by</strong><br>
-            Google Gemini 2.5 Flash<br>
-            Google Agent Development Kit
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-
-    st.markdown("""
     <div class="footer-text" style="border-top: none; margin-top: 1.5rem; padding-top: 0;">
-        Made with ❤️ by <a href="https://github.com/ftkhirabditanaya" target="_blank">Khirabdi Tanaya</a>
+        Created by <a href="https://github.com/ftkhirabditanaya" target="_blank">Khirabdi Tanaya</a>
     </div>
     """, unsafe_allow_html=True)
 
@@ -171,7 +175,7 @@ with st.sidebar:
 # PAGE: Home
 # ============================================
 
-if page == "🏠  Home":
+if page == "Home":
 
     # Hero Section
     st.markdown("""
@@ -185,46 +189,32 @@ if page == "🏠  Home":
     </div>
     """, unsafe_allow_html=True)
 
-    # Stats Row
+    # Section divider
     st.markdown("<div class='section-divider'></div>", unsafe_allow_html=True)
-
-    col1, col2, col3, col4 = st.columns(4)
-
-    with col1:
-        st.metric("🤖 AI Agents", "9")
-    with col2:
-        careers_df = load_csv("careers.csv")
-        st.metric("🧭 Careers", str(len(careers_df)))
-    with col3:
-        internships_df = load_csv("internships.csv")
-        st.metric("🎯 Internships", str(len(internships_df)))
-    with col4:
-        scholarships_df = load_csv("scholarships.csv")
-        st.metric("🏆 Scholarships", str(len(scholarships_df)))
 
     st.markdown("<br>", unsafe_allow_html=True)
 
     # Feature Cards
-    st.markdown("### ✨ What Can EduBridge AI Do For You?")
+    st.markdown("### What Can EduBridge AI Do For You?")
     st.markdown("<div class='section-divider' style='margin: 0.75rem 0 1.5rem 0;'></div>", unsafe_allow_html=True)
 
     row1_cols = st.columns(3)
 
     with row1_cols[0]:
         st.markdown(feature_card(
-            "🧭", "Career Guidance",
+            "Career Guidance",
             "Get AI-powered career recommendations based on your stream, skills, and interests."
         ), unsafe_allow_html=True)
 
     with row1_cols[1]:
         st.markdown(feature_card(
-            "🏫", "College Finder",
+            "College Finder",
             "Discover top colleges matching your course preferences with fees, rankings, and more."
         ), unsafe_allow_html=True)
 
     with row1_cols[2]:
         st.markdown(feature_card(
-            "🏆", "Scholarships",
+            "Scholarships",
             "Find scholarships you're eligible for with amounts, deadlines, and application details."
         ), unsafe_allow_html=True)
 
@@ -234,19 +224,19 @@ if page == "🏠  Home":
 
     with row2_cols[0]:
         st.markdown(feature_card(
-            "🎯", "Internship Hub",
+            "Internship Hub",
             "Search internships by domain, location, mode, and stipend with smart recommendations."
         ), unsafe_allow_html=True)
 
     with row2_cols[1]:
         st.markdown(feature_card(
-            "📄", "Resume Analyzer",
+            "Resume Analyzer",
             "Upload your resume and get ATS scores, skill analysis, and improvement suggestions."
         ), unsafe_allow_html=True)
 
     with row2_cols[2]:
         st.markdown(feature_card(
-            "💡", "Project Mentor",
+            "Project Mentor",
             "Get portfolio project ideas with step-by-step guides for internships and placements."
         ), unsafe_allow_html=True)
 
@@ -256,53 +246,42 @@ if page == "🏠  Home":
 
     with row3_cols[0]:
         st.markdown(feature_card(
-            "📚", "Study Planner",
+            "Study Planner",
             "Generate personalized study plans with daily schedules, weekly targets, and revision strategies."
         ), unsafe_allow_html=True)
 
     with row3_cols[1]:
         st.markdown(feature_card(
-            "🎤", "Interview Prep",
+            "Interview Prep",
             "Prepare for technical and HR interviews with curated questions and expert tips."
         ), unsafe_allow_html=True)
 
     with row3_cols[2]:
         st.markdown(feature_card(
-            "📊", "Skills Dashboard",
+            "Skills Dashboard",
             "Explore in-demand skills across categories and plan your learning journey."
         ), unsafe_allow_html=True)
 
     # Agent Architecture
     st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown("### 🏗️ Multi-Agent Architecture")
+    st.markdown("### Multi-Agent Architecture")
     st.markdown("<div class='section-divider' style='margin: 0.75rem 0 1.5rem 0;'></div>", unsafe_allow_html=True)
 
     agents = [
-        ("🧠", "Coordinator"), ("🧭", "Career"), ("🏫", "College"),
-        ("🏆", "Scholarship"), ("📚", "Study Planner"), ("🎯", "Internship"),
-        ("📄", "Resume"), ("📊", "ATS Scorer"), ("🎤", "Interview"), ("💡", "Project Mentor"),
+        "Coordinator", "Career", "College", "Scholarship", "Study Planner",
+        "Internship", "Resume", "ATS Scorer", "Interview", "Project Mentor",
     ]
 
     badges_html = '<div style="display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center;">'
-    for icon, name in agents:
-        badges_html += f'<div class="agent-badge">{icon} {name}</div>'
+    for name in agents:
+        badges_html += f'<div class="agent-badge">{name}</div>'
     badges_html += '</div>'
     st.markdown(badges_html, unsafe_allow_html=True)
-
-    st.markdown("""
-    <div class="info-card" style="margin-top: 1.5rem; text-align: center;">
-        <p style="margin: 0;">
-            Built with <strong>Google Agent Development Kit (ADK)</strong> and
-            <strong>Gemini 2.5 Flash</strong> — the coordinator automatically
-            routes your questions to the right specialist agent.
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
 
     # Footer
     st.markdown("""
     <div class="footer-text">
-        EduBridge AI © 2026 • Built by
+        EduBridge AI 2026 • Built by
         <a href="https://github.com/ftkhirabditanaya" target="_blank">Khirabdi Tanaya</a>
         • Powered by Google Gemini AI
     </div>
@@ -313,11 +292,11 @@ if page == "🏠  Home":
 # PAGE: AI Chat
 # ============================================
 
-elif page == "💬  AI Chat":
+elif page == "AI Chat":
 
     st.markdown("""
     <div class="hero-container fade-in" style="padding: 1rem 0;">
-        <div class="hero-title" style="font-size: 2rem;">💬 AI Chat Assistant</div>
+        <div class="hero-title" style="font-size: 2rem;">AI Chat Assistant</div>
         <div class="hero-subtitle" style="font-size: 0.95rem;">
             Ask anything about careers, colleges, scholarships, internships, and more.
             The AI coordinator will route your question to the best specialist.
@@ -332,18 +311,18 @@ elif page == "💬  AI Chat":
         st.session_state.chat_messages = [
             {
                 "role": "assistant",
-                "content": """👋 **Welcome to EduBridge AI!**
+                "content": """**Welcome to EduBridge AI!**
 
 I'm your AI-powered educational guide. I can help you with:
 
-- 🧭 **Career Guidance** — Discover career paths based on your interests
-- 🏫 **College Recommendations** — Find the best colleges for your goals
-- 🏆 **Scholarships** — Search for scholarships you're eligible for
-- 🎯 **Internships** — Find internships matching your skills
-- 📄 **Resume Analysis** — Get your resume scored and improved
-- 📚 **Study Planning** — Create personalized study plans
-- 🎤 **Interview Prep** — Prepare for technical and HR interviews
-- 💡 **Project Ideas** — Get portfolio project suggestions
+- **Career Guidance** — Discover career paths based on your interests
+- **College Recommendations** — Find the best colleges for your goals
+- **Scholarships** — Search for scholarships you're eligible for
+- **Internships** — Find internships matching your skills
+- **Resume Analysis** — Get your resume scored and improved
+- **Study Planning** — Create personalized study plans
+- **Interview Prep** — Prepare for technical and HR interviews
+- **Project Ideas** — Get portfolio project suggestions
 
 **Try asking:** _"I'm a PCB student interested in AI. What careers can I pursue?"_"""
             }
@@ -351,18 +330,18 @@ I'm your AI-powered educational guide. I can help you with:
 
     # Display chat messages
     for msg in st.session_state.chat_messages:
-        with st.chat_message(msg["role"], avatar="🎓" if msg["role"] == "assistant" else "👤"):
+        with st.chat_message(msg["role"]):
             st.markdown(msg["content"])
 
     # Chat input
     if prompt := st.chat_input("Ask me anything about your educational journey..."):
         # Add user message
         st.session_state.chat_messages.append({"role": "user", "content": prompt})
-        with st.chat_message("user", avatar="👤"):
+        with st.chat_message("user"):
             st.markdown(prompt)
 
         # Generate response
-        with st.chat_message("assistant", avatar="🎓"):
+        with st.chat_message("assistant"):
             with st.spinner(""):
                 st.markdown("""
                 <div class="loading-dots">
@@ -391,6 +370,7 @@ internships, study planning, resume analysis, interview preparation, and project
 
 Always respond with well-formatted markdown using headings, bullet points, and tables.
 Be warm, supportive, and thorough in your responses.
+Do not use emojis.
 If the student asks about careers, recommend 3-5 options with details.
 If asked about colleges, include fees, rankings, and entrance exams.
 If asked about internships, include company, role, stipend, and skills needed.
@@ -413,7 +393,7 @@ Always be encouraging and student-friendly."""
 2. The `google-genai` package is installed
 3. You have an active internet connection
 
-In the meantime, feel free to explore the other sections using the sidebar! 🎓
+In the meantime, feel free to explore the other sections using the sidebar!
 
 _Error: {str(e)}_"""
 
@@ -422,7 +402,7 @@ _Error: {str(e)}_"""
 
     # Quick Action Buttons
     st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown("#### 💡 Quick Questions")
+    st.markdown("#### Quick Questions")
 
     qcols = st.columns(3)
 
@@ -434,7 +414,7 @@ _Error: {str(e)}_"""
 
     for i, q in enumerate(quick_questions):
         with qcols[i]:
-            if st.button(f"💬 {q[:45]}...", key=f"qq_{i}", use_container_width=True):
+            if st.button(f"{q[:45]}...", key=f"qq_{i}", use_container_width=True):
                 st.session_state.chat_messages.append({"role": "user", "content": q})
                 st.rerun()
 
@@ -443,11 +423,11 @@ _Error: {str(e)}_"""
 # PAGE: Pathway Planner
 # ============================================
 
-elif page == "🗺️  Pathway Planner":
+elif page == "Pathway Planner":
 
     st.markdown("""
     <div class="hero-container fade-in" style="padding: 1rem 0;">
-        <div class="hero-title" style="font-size: 2rem;">🗺️ Pathway Planner</div>
+        <div class="hero-title" style="font-size: 2rem;">Pathway Planner</div>
         <div class="hero-subtitle" style="font-size: 0.95rem;">
             Turn a career goal, the skills you already have, and your real-world constraints
             into an explainable plan with milestones, projects, opportunities, and funding leads.
@@ -531,7 +511,7 @@ elif page == "🗺️  Pathway Planner":
                     weekly_hours=weekly_hours,
                     monthly_budget=monthly_budget,
                     months=months,
-                    stream="" if stream == "Not specified" else stream,
+                    stream=""if stream == "Not specified" else stream,
                     location=location.strip(),
                 )
                 st.session_state["pathway_plan"] = plan
@@ -671,7 +651,7 @@ elif page == "🗺️  Pathway Planner":
                 "",
                 "## Skill gaps",
                 *(
-                    [f"- {skill}" for skill in plan["skills"]["gaps"]]
+                    [f"- {skill}"for skill in plan["skills"]["gaps"]]
                     or ["- No catalog gaps identified"]
                 ),
                 "",
@@ -707,11 +687,11 @@ elif page == "🗺️  Pathway Planner":
 # PAGE: Career Explorer
 # ============================================
 
-elif page == "🧭  Career Explorer":
+elif page == "Career Explorer":
 
     st.markdown("""
     <div class="hero-container fade-in" style="padding: 1rem 0;">
-        <div class="hero-title" style="font-size: 2rem;">🧭 Career Explorer</div>
+        <div class="hero-title" style="font-size: 2rem;">Career Explorer</div>
         <div class="hero-subtitle" style="font-size: 0.95rem;">
             Discover career paths tailored to your academic background and interests.
         </div>
@@ -728,10 +708,10 @@ elif page == "🧭  Career Explorer":
 
         with col1:
             streams = ["All"] + sorted(df["stream"].unique().tolist())
-            selected_stream = st.selectbox("🎓 Filter by Stream", streams)
+            selected_stream = st.selectbox("Filter by Stream", streams)
 
         with col2:
-            search = st.text_input("🔍 Search careers or skills", placeholder="e.g., Python, AI, Biology")
+            search = st.text_input("Search careers or skills", placeholder="e.g., Python, AI, Biology")
 
         # Apply filters
         filtered = df.copy()
@@ -772,17 +752,17 @@ elif page == "🧭  Career Explorer":
                 <div style="margin: 0.75rem 0;">
                     {tags_html}
                 </div>
-                <div style="display: flex; gap: 1.5rem; font-size: 0.82rem; color: #9aa0ae;">
-                    <span>📋 Stream: <strong style="color: #374151;">{career.get('stream', 'N/A')}</strong></span>
-                    <span>🎓 Degree: <strong style="color: #374151;">{career.get('degree', 'N/A')}</strong></span>
-                    <span>📈 Scope: <strong style="color: #374151;">{career.get('future_scope', 'N/A')}</strong></span>
+                <div style="display: flex; gap: 1.5rem; font-size: 0.82rem; color: #6b7b6c;">
+                    <span>Stream: <strong style="color: #526553;">{career.get('stream', 'N/A')}</strong></span>
+                    <span>Degree: <strong style="color: #526553;">{career.get('degree', 'N/A')}</strong></span>
+                    <span>Scope: <strong style="color: #526553;">{career.get('future_scope', 'N/A')}</strong></span>
                 </div>
             </div>
             """, unsafe_allow_html=True)
 
         # Salary Chart
         st.markdown("<br>", unsafe_allow_html=True)
-        st.markdown("### 📊 Salary Comparison")
+        st.markdown("### Salary Comparison")
 
         if "average_salary" in filtered.columns and "career" in filtered.columns:
             chart_df = filtered[["career", "average_salary"]].dropna()
@@ -795,20 +775,20 @@ elif page == "🧭  Career Explorer":
                 orientation="h",
                 labels={"salary_lpa": "Average Salary (LPA)", "career": ""},
                 color="salary_lpa",
-                color_continuous_scale=["#b8daff", "#4a94e8", "#265ea3"],
+                color_continuous_scale=["#d5e4c9", "#8eaf80", "#527957"],
             )
             fig.update_layout(
                 height=400,
                 paper_bgcolor="rgba(0,0,0,0)",
                 plot_bgcolor="rgba(0,0,0,0)",
-                font={"family": "Inter", "color": "#374151"},
+                font={"family": "DM Sans", "color": "#526553"},
                 showlegend=False,
                 coloraxis_showscale=False,
-                xaxis={"gridcolor": "#e0efff"},
-                yaxis={"gridcolor": "#e0efff"},
+                xaxis={"gridcolor": "#dfe7d8"},
+                yaxis={"gridcolor": "#dfe7d8"},
                 margin=dict(l=10, r=10, t=20, b=10),
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(style_chart(fig), use_container_width=True)
 
     else:
         st.info("Career database not found. Please ensure `database/careers.csv` exists.")
@@ -818,11 +798,11 @@ elif page == "🧭  Career Explorer":
 # PAGE: College Finder
 # ============================================
 
-elif page == "🏫  College Finder":
+elif page == "College Finder":
 
     st.markdown("""
     <div class="hero-container fade-in" style="padding: 1rem 0;">
-        <div class="hero-title" style="font-size: 2rem;">🏫 College Finder</div>
+        <div class="hero-title" style="font-size: 2rem;">College Finder</div>
         <div class="hero-subtitle" style="font-size: 0.95rem;">
             Find the best colleges for your preferred course, with fees, rankings, and entrance details.
         </div>
@@ -839,14 +819,14 @@ elif page == "🏫  College Finder":
 
         with col1:
             courses = ["All"] + sorted(df["course"].unique().tolist())
-            selected_course = st.selectbox("📖 Course", courses)
+            selected_course = st.selectbox("Course", courses)
 
         with col2:
             states = ["All"] + sorted(df["state"].unique().tolist())
-            selected_state = st.selectbox("📍 State", states)
+            selected_state = st.selectbox("State", states)
 
         with col3:
-            search = st.text_input("🔍 Search", placeholder="College name...")
+            search = st.text_input("Search", placeholder="College name...")
 
         # Apply filters
         filtered = df.copy()
@@ -865,36 +845,36 @@ elif page == "🏫  College Finder":
             ]
 
         st.markdown(f"<br>", unsafe_allow_html=True)
-        st.markdown(f"### 🏫 Found {len(filtered)} Colleges")
+        st.markdown(f"### Found {len(filtered)} Colleges")
 
         # College cards
         for _, college in filtered.iterrows():
             fees = college.get("fees", 0)
-            fees_str = f"₹{fees:,.0f}" if fees else "N/A"
+            fees_str = f"₹{fees:,.0f}"if fees else "N/A"
             ranking = college.get("ranking", "N/A")
 
-            rank_color = "#34d399" if ranking and ranking <= 10 else "#fbbf24" if ranking and ranking <= 20 else "#6b7280"
+            rank_color = "#43835c" if ranking and ranking <= 10 else "#98792d" if ranking and ranking <= 20 else "#8d9cb0"
 
             st.markdown(f"""
             <div class="result-card">
                 <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                     <div>
                         <h4 style="margin: 0 0 0.5rem 0;">{college.get('college', 'N/A')}</h4>
-                        <div style="display: flex; gap: 1rem; flex-wrap: wrap; font-size: 0.85rem; color: #6b7280;">
-                            <span>📍 {college.get('city', '')}, {college.get('state', '')}</span>
-                            <span>📖 {college.get('course', 'N/A')}</span>
-                            <span>📝 {college.get('exam', 'N/A')}</span>
+                        <div style="display: flex; gap: 1rem; flex-wrap: wrap; font-size: 0.85rem; color: #6b7b6c;">
+                            <span>{college.get('city', '')}, {college.get('state', '')}</span>
+                            <span>{college.get('course', 'N/A')}</span>
+                            <span>{college.get('exam', 'N/A')}</span>
                         </div>
                     </div>
                     <div style="text-align: right;">
-                        <div style="font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.4rem; color: {rank_color};">
+                        <div style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.4rem; color: {rank_color};">
                             #{ranking}
                         </div>
-                        <div style="font-size: 0.75rem; color: #9aa0ae;">Ranking</div>
+                        <div style="font-size: 0.75rem; color: #6b7b6c;">Ranking</div>
                     </div>
                 </div>
-                <div style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid #e0efff;">
-                    <span class="stat-badge">💰 Fees: {fees_str}/year</span>
+                <div style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid #c6d3bf;">
+                    <span class="stat-badge">Fees: {fees_str}/year</span>
                 </div>
             </div>
             """, unsafe_allow_html=True)
@@ -902,7 +882,7 @@ elif page == "🏫  College Finder":
         # Fees comparison chart
         if len(filtered) > 1 and "fees" in filtered.columns:
             st.markdown("<br>", unsafe_allow_html=True)
-            st.markdown("### 📊 Fees Comparison")
+            st.markdown("### Fees Comparison")
 
             chart_df = filtered[["college", "fees"]].dropna()
             chart_df["fees_k"] = chart_df["fees"] / 1000
@@ -913,20 +893,20 @@ elif page == "🏫  College Finder":
                 y="fees_k",
                 labels={"fees_k": "Annual Fees (₹ thousands)", "college": ""},
                 color="fees_k",
-                color_continuous_scale=["#fcecc8", "#f8dfa5", "#fbbf24"],
+                color_continuous_scale=["#f5ecc4", "#e8d486", "#9a8140"],
             )
             fig.update_layout(
                 height=350,
                 paper_bgcolor="rgba(0,0,0,0)",
                 plot_bgcolor="rgba(0,0,0,0)",
-                font={"family": "Inter", "color": "#374151"},
+                font={"family": "DM Sans", "color": "#526553"},
                 showlegend=False,
                 coloraxis_showscale=False,
-                xaxis={"gridcolor": "#e0efff", "tickangle": -25},
-                yaxis={"gridcolor": "#e0efff"},
+                xaxis={"gridcolor": "#dfe7d8", "tickangle": -25},
+                yaxis={"gridcolor": "#dfe7d8"},
                 margin=dict(l=10, r=10, t=20, b=10),
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(style_chart(fig), use_container_width=True)
 
     else:
         st.info("College database not found. Please ensure `database/colleges.csv` exists.")
@@ -936,11 +916,11 @@ elif page == "🏫  College Finder":
 # PAGE: Internship Hub
 # ============================================
 
-elif page == "🎯  Internship Hub":
+elif page == "Internship Hub":
 
     st.markdown("""
     <div class="hero-container fade-in" style="padding: 1rem 0;">
-        <div class="hero-title" style="font-size: 2rem;">🎯 Internship Hub</div>
+        <div class="hero-title" style="font-size: 2rem;">Internship Hub</div>
         <div class="hero-subtitle" style="font-size: 0.95rem;">
             Find internships that match your skills, domain, and preferences with smart recommendations.
         </div>
@@ -957,18 +937,18 @@ elif page == "🎯  Internship Hub":
 
         with col1:
             domains = ["All"] + sorted(df["domain"].unique().tolist())
-            selected_domain = st.selectbox("🔬 Domain", domains)
+            selected_domain = st.selectbox("Domain", domains)
 
         with col2:
             locations = ["All"] + sorted(df["location"].unique().tolist())
-            selected_location = st.selectbox("📍 Location", locations)
+            selected_location = st.selectbox("Location", locations)
 
         with col3:
             modes = ["All"] + sorted(df["mode"].unique().tolist())
-            selected_mode = st.selectbox("🏢 Mode", modes)
+            selected_mode = st.selectbox("Mode", modes)
 
         with col4:
-            min_stipend = st.number_input("💰 Min Stipend (₹)", min_value=0, value=0, step=5000)
+            min_stipend = st.number_input("Min Stipend (₹)", min_value=0, value=0, step=5000)
 
         # Apply filters
         filtered = df.copy()
@@ -988,7 +968,7 @@ elif page == "🎯  Internship Hub":
             filtered = filtered[filtered["stipend"] >= min_stipend]
 
         st.markdown(f"<br>", unsafe_allow_html=True)
-        st.markdown(f"### 🎯 Found {len(filtered)} Internships")
+        st.markdown(f"### Found {len(filtered)} Internships")
 
         # Internship cards
         for _, intern in filtered.iterrows():
@@ -1001,14 +981,14 @@ elif page == "🎯  Internship Hub":
                 for skill in str(skills_list).split(","):
                     tags_html += f'<span class="tag">{skill.strip()}</span> '
 
-            mode_color = "#34d399" if intern.get("mode") == "Remote" else "#60a5fa" if intern.get("mode") == "Hybrid" else "#fbbf24"
+            mode_color = "#43835c" if intern.get("mode") == "Remote" else "#527957" if intern.get("mode") == "Hybrid" else "#98792d"
 
             st.markdown(f"""
             <div class="result-card">
                 <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                     <div>
                         <h4 style="margin: 0;">{intern.get('company', 'N/A')}</h4>
-                        <p style="margin: 0.25rem 0 0.5rem; font-size: 0.92rem; color: #374151; font-weight: 500;">
+                        <p style="margin: 0.25rem 0 0.5rem; font-size: 0.92rem; color: #526553; font-weight: 500;">
                             {intern.get('role', 'N/A')}
                         </p>
                     </div>
@@ -1020,12 +1000,12 @@ elif page == "🎯  Internship Hub":
                     </div>
                 </div>
                 <div style="margin: 0.75rem 0;">{tags_html}</div>
-                <div style="display: flex; gap: 1.5rem; font-size: 0.82rem; color: #9aa0ae; flex-wrap: wrap;">
-                    <span>📍 {intern.get('location', 'N/A')}</span>
-                    <span>🔬 {intern.get('domain', 'N/A')}</span>
-                    <span>🎓 {intern.get('branch', 'All')}</span>
-                    <a href="{intern.get('apply_link', '#')}" target="_blank" style="color: #4a94e8; font-weight: 600; text-decoration: none;">
-                        🔗 Apply Now →
+                <div style="display: flex; gap: 1.5rem; font-size: 0.82rem; color: #6b7b6c; flex-wrap: wrap;">
+                    <span>{intern.get('location', 'N/A')}</span>
+                    <span>{intern.get('domain', 'N/A')}</span>
+                    <span>{intern.get('branch', 'All')}</span>
+                    <a href="{intern.get('apply_link', '#')}" target="_blank" style="color: #34583d; font-weight: 600; text-decoration: none;">
+                        Apply Now
                     </a>
                 </div>
             </div>
@@ -1034,7 +1014,7 @@ elif page == "🎯  Internship Hub":
         # Stipend chart
         if len(filtered) > 1 and "stipend" in filtered.columns:
             st.markdown("<br>", unsafe_allow_html=True)
-            st.markdown("### 📊 Stipend Comparison")
+            st.markdown("### Stipend Comparison")
 
             chart_df = filtered[["company", "role", "stipend"]].dropna()
             chart_df["label"] = chart_df["company"] + " - " + chart_df["role"]
@@ -1047,20 +1027,20 @@ elif page == "🎯  Internship Hub":
                 orientation="h",
                 labels={"stipend_k": "Monthly Stipend (₹ thousands)", "label": ""},
                 color="stipend_k",
-                color_continuous_scale=["#b8daff", "#4a94e8", "#265ea3"],
+                color_continuous_scale=["#d5e4c9", "#8eaf80", "#527957"],
             )
             fig.update_layout(
                 height=max(300, len(chart_df) * 45),
                 paper_bgcolor="rgba(0,0,0,0)",
                 plot_bgcolor="rgba(0,0,0,0)",
-                font={"family": "Inter", "color": "#374151"},
+                font={"family": "DM Sans", "color": "#526553"},
                 showlegend=False,
                 coloraxis_showscale=False,
-                xaxis={"gridcolor": "#e0efff"},
-                yaxis={"gridcolor": "#e0efff"},
+                xaxis={"gridcolor": "#dfe7d8"},
+                yaxis={"gridcolor": "#dfe7d8"},
                 margin=dict(l=10, r=10, t=20, b=10),
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(style_chart(fig), use_container_width=True)
 
     else:
         st.info("Internship database not found. Please ensure `database/internships.csv` exists.")
@@ -1070,11 +1050,11 @@ elif page == "🎯  Internship Hub":
 # PAGE: Scholarships
 # ============================================
 
-elif page == "🏆  Scholarships":
+elif page == "Scholarships":
 
     st.markdown("""
     <div class="hero-container fade-in" style="padding: 1rem 0;">
-        <div class="hero-title" style="font-size: 2rem;">🏆 Scholarships</div>
+        <div class="hero-title" style="font-size: 2rem;">Scholarships</div>
         <div class="hero-subtitle" style="font-size: 0.95rem;">
             Discover scholarships you're eligible for, with amounts, eligibility, and deadlines.
         </div>
@@ -1087,7 +1067,7 @@ elif page == "🏆  Scholarships":
 
     if not df.empty:
         # Search
-        search = st.text_input("🔍 Search scholarships", placeholder="e.g., Engineering, Merit, SC/ST...")
+        search = st.text_input("Search scholarships", placeholder="e.g., Engineering, Merit, SC/ST...")
 
         filtered = df.copy()
         if search:
@@ -1096,11 +1076,11 @@ elif page == "🏆  Scholarships":
             ]
 
         st.markdown(f"<br>", unsafe_allow_html=True)
-        st.markdown(f"### 🏆 Found {len(filtered)} Scholarships")
+        st.markdown(f"### Found {len(filtered)} Scholarships")
 
         for _, sch in filtered.iterrows():
             amount = sch.get("amount", 0)
-            amount_str = f"₹{amount:,.0f}" if amount else "N/A"
+            amount_str = f"₹{amount:,.0f}"if amount else "N/A"
 
             st.markdown(f"""
             <div class="result-card">
@@ -1108,20 +1088,20 @@ elif page == "🏆  Scholarships":
                     <div>
                         <h4 style="margin: 0 0 0.5rem 0;">{sch.get('scholarship', 'N/A')}</h4>
                         <p style="margin: 0; font-size: 0.88rem;">
-                            <strong style="color: #374151;">Eligibility:</strong>
+                            <strong style="color: #526553;">Eligibility:</strong>
                             {sch.get('eligibility', 'N/A')}
                         </p>
                     </div>
                     <div style="text-align: right;">
-                        <div style="font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.3rem; color: #265ea3;">
+                        <div style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.3rem; color: #456b4b;">
                             {amount_str}
                         </div>
-                        <div style="font-size: 0.75rem; color: #9aa0ae;">Scholarship Amount</div>
+                        <div style="font-size: 0.75rem; color: #6b7b6c;">Scholarship Amount</div>
                     </div>
                 </div>
-                <div style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid #e0efff;">
-                    <span style="font-size: 0.85rem; color: #6b7280;">
-                        📅 <strong>Deadline:</strong> {sch.get('last_date', 'N/A')}
+                <div style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid #c6d3bf;">
+                    <span style="font-size: 0.85rem; color: #6b7b6c;">
+                        <strong>Deadline:</strong> {sch.get('last_date', 'N/A')}
                     </span>
                 </div>
             </div>
@@ -1130,7 +1110,7 @@ elif page == "🏆  Scholarships":
         # Amount comparison
         if len(filtered) > 1 and "amount" in filtered.columns:
             st.markdown("<br>", unsafe_allow_html=True)
-            st.markdown("### 📊 Scholarship Amount Comparison")
+            st.markdown("### Scholarship Amount Comparison")
 
             chart_df = filtered[["scholarship", "amount"]].dropna()
             chart_df["amount_k"] = chart_df["amount"] / 1000
@@ -1142,20 +1122,20 @@ elif page == "🏆  Scholarships":
                 orientation="h",
                 labels={"amount_k": "Amount (₹ thousands)", "scholarship": ""},
                 color="amount_k",
-                color_continuous_scale=["#fcecc8", "#fbbf24", "#f59e0b"],
+                color_continuous_scale=["#f5ecc4", "#e8d486", "#9a8140"],
             )
             fig.update_layout(
                 height=max(300, len(chart_df) * 45),
                 paper_bgcolor="rgba(0,0,0,0)",
                 plot_bgcolor="rgba(0,0,0,0)",
-                font={"family": "Inter", "color": "#374151"},
+                font={"family": "DM Sans", "color": "#526553"},
                 showlegend=False,
                 coloraxis_showscale=False,
-                xaxis={"gridcolor": "#e0efff"},
-                yaxis={"gridcolor": "#e0efff"},
+                xaxis={"gridcolor": "#dfe7d8"},
+                yaxis={"gridcolor": "#dfe7d8"},
                 margin=dict(l=10, r=10, t=20, b=10),
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(style_chart(fig), use_container_width=True)
 
     else:
         st.info("Scholarship database not found. Please ensure `database/scholarships.csv` exists.")
@@ -1165,11 +1145,11 @@ elif page == "🏆  Scholarships":
 # PAGE: Resume Analyzer
 # ============================================
 
-elif page == "📄  Resume Analyzer":
+elif page == "Resume Analyzer":
 
     st.markdown("""
     <div class="hero-container fade-in" style="padding: 1rem 0;">
-        <div class="hero-title" style="font-size: 2rem;">📄 Resume Analyzer</div>
+        <div class="hero-title" style="font-size: 2rem;">Resume Analyzer</div>
         <div class="hero-subtitle" style="font-size: 0.95rem;">
             Upload your resume and get an ATS compatibility score, skill analysis,
             and personalized improvement suggestions.
@@ -1186,7 +1166,7 @@ elif page == "📄  Resume Analyzer":
     )
 
     # Also allow pasting text
-    with st.expander("📝 Or paste your resume text"):
+    with st.expander("Or paste your resume text"):
         pasted_text = st.text_area(
             "Paste resume text here",
             height=200,
@@ -1208,7 +1188,7 @@ elif page == "📄  Resume Analyzer":
         try:
             from tools.resume_parser import extract_text
             resume_text = extract_text(file_path)
-            st.success(f"✅ Resume uploaded successfully: **{uploaded_file.name}**")
+            st.success(f"Resume uploaded successfully: **{uploaded_file.name}**")
         except Exception as e:
             st.error(f"Error reading file: {str(e)}")
 
@@ -1218,7 +1198,7 @@ elif page == "📄  Resume Analyzer":
     if resume_text:
         st.markdown("<br>", unsafe_allow_html=True)
 
-        with st.spinner("🔍 Analyzing your resume..."):
+        with st.spinner("Analyzing your resume..."):
             time.sleep(0.5)
 
             # Analyze resume
@@ -1229,7 +1209,7 @@ elif page == "📄  Resume Analyzer":
             ats = calculate_ats_score(resume_text)
 
         # Results in tabs
-        tab1, tab2, tab3 = st.tabs(["📊 ATS Score", "🔍 Analysis", "💡 Recommendations"])
+        tab1, tab2, tab3 = st.tabs(["ATS Score", "Analysis", "Recommendations"])
 
         with tab1:
             st.markdown("<br>", unsafe_allow_html=True)
@@ -1239,13 +1219,13 @@ elif page == "📄  Resume Analyzer":
             with col1:
                 # Score gauge
                 fig = render_score_gauge(ats["ATS Score"])
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(style_chart(fig), use_container_width=True)
 
             with col2:
                 st.markdown("#### Strengths")
                 if ats.get("Strengths"):
                     for s in ats["Strengths"]:
-                        st.markdown(f"✅ {s}")
+                        st.markdown(s)
                 else:
                     st.markdown("_No major strengths detected yet._")
 
@@ -1254,7 +1234,7 @@ elif page == "📄  Resume Analyzer":
                 st.markdown("#### Suggestions")
                 if ats.get("Suggestions"):
                     for s in ats["Suggestions"]:
-                        st.markdown(f"💡 {s}")
+                        st.markdown(s)
                 else:
                     st.markdown("_Looking good! No additional suggestions._")
 
@@ -1264,17 +1244,17 @@ elif page == "📄  Resume Analyzer":
             scol1, scol2 = st.columns(2)
 
             with scol1:
-                st.markdown("#### ✅ Technical Skills Found")
+                st.markdown("#### Technical Skills Found")
                 if ats.get("Technical Skills"):
-                    tags = " ".join([f'<span class="tag">{s.title()}</span>' for s in ats["Technical Skills"]])
+                    tags = " ".join([f'<span class="tag">{s.title()}</span>'for s in ats["Technical Skills"]])
                     st.markdown(f"<div>{tags}</div>", unsafe_allow_html=True)
                 else:
                     st.info("No technical skills detected.")
 
             with scol2:
-                st.markdown("#### ⚠️ Missing Skills")
+                st.markdown("#### Missing Skills")
                 if ats.get("Missing Skills"):
-                    tags = " ".join([f'<span class="tag" style="background: #fef2f2; color: #f87171;">{s.title()}</span>' for s in ats["Missing Skills"][:8]])
+                    tags = " ".join([f'<span class="tag" style="background: rgba(255,133,142,0.12); color: #a64e4a;">{s.title()}</span>'for s in ats["Missing Skills"][:8]])
                     st.markdown(f"<div>{tags}</div>", unsafe_allow_html=True)
                 else:
                     st.success("Great! No critical missing skills.")
@@ -1285,11 +1265,11 @@ elif page == "📄  Resume Analyzer":
             # Personal info
             info_col1, info_col2, info_col3 = st.columns(3)
             with info_col1:
-                st.metric("👤 Name", analysis.get("Name", "N/A"))
+                st.metric("Name", analysis.get("Name", "N/A"))
             with info_col2:
-                st.metric("📧 Email", analysis.get("Email", "N/A"))
+                st.metric("Email", analysis.get("Email", "N/A"))
             with info_col3:
-                st.metric("📱 Phone", analysis.get("Phone", "N/A"))
+                st.metric("Phone", analysis.get("Phone", "N/A"))
 
             st.markdown("<br>", unsafe_allow_html=True)
 
@@ -1297,16 +1277,16 @@ elif page == "📄  Resume Analyzer":
             det_col1, det_col2 = st.columns(2)
 
             with det_col1:
-                st.markdown("#### 🛠️ Skills Detected")
+                st.markdown("#### Skills Detected")
                 if analysis.get("Skills"):
-                    tags = " ".join([f'<span class="tag">{s}</span>' for s in analysis["Skills"]])
+                    tags = " ".join([f'<span class="tag">{s}</span>'for s in analysis["Skills"]])
                     st.markdown(f"<div>{tags}</div>", unsafe_allow_html=True)
                 else:
                     st.info("No skills detected.")
 
                 st.markdown("<br>", unsafe_allow_html=True)
 
-                st.markdown("#### 🎓 Education")
+                st.markdown("#### Education")
                 if analysis.get("Education"):
                     for edu in analysis["Education"]:
                         st.markdown(f"• {edu}")
@@ -1314,7 +1294,7 @@ elif page == "📄  Resume Analyzer":
                     st.info("No education details found.")
 
             with det_col2:
-                st.markdown("#### 💼 Projects")
+                st.markdown("#### Projects")
                 if analysis.get("Projects"):
                     for proj in analysis["Projects"]:
                         st.markdown(f"• {proj}")
@@ -1323,7 +1303,7 @@ elif page == "📄  Resume Analyzer":
 
                 st.markdown("<br>", unsafe_allow_html=True)
 
-                st.markdown("#### 🏢 Experience")
+                st.markdown("#### Experience")
                 if analysis.get("Experience"):
                     for exp in analysis["Experience"]:
                         st.markdown(f"• {exp}")
@@ -1334,7 +1314,7 @@ elif page == "📄  Resume Analyzer":
             st.markdown("<br>", unsafe_allow_html=True)
 
             # Internship matching
-            st.markdown("#### 🎯 Recommended Internships Based on Your Resume")
+            st.markdown("#### Recommended Internships Based on Your Resume")
 
             try:
                 from tools.recommendation_resume import recommend_from_resume, calculate_resume_score
@@ -1350,27 +1330,27 @@ elif page == "📄  Resume Analyzer":
                     recommendations.sort(key=lambda x: x["score"], reverse=True)
 
                     for rec in recommendations[:5]:
-                        match_tags = " ".join([f'<span class="tag">{s}</span>' for s in rec.get("matched_skills", [])])
-                        missing_tags = " ".join([f'<span class="tag" style="background: #fef2f2; color: #f87171;">{s}</span>' for s in rec.get("missing_skills", [])])
+                        match_tags = " ".join([f'<span class="tag">{s}</span>'for s in rec.get("matched_skills", [])])
+                        missing_tags = " ".join([f'<span class="tag" style="background: rgba(255,133,142,0.12); color: #a64e4a;">{s}</span>'for s in rec.get("missing_skills", [])])
 
                         st.markdown(f"""
                         <div class="result-card">
                             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                                 <div>
                                     <h4 style="margin: 0;">{rec.get('company', 'N/A')}</h4>
-                                    <p style="margin: 0.25rem 0; font-weight: 500; color: #374151;">{rec.get('role', 'N/A')}</p>
+                                    <p style="margin: 0.25rem 0; font-weight: 500; color: #526553;">{rec.get('role', 'N/A')}</p>
                                 </div>
-                                <div style="font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.5rem; color: {'#34d399' if rec['score'] >= 70 else '#fbbf24' if rec['score'] >= 40 else '#f87171'};">
+                                <div style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.5rem; color: {'#43835c' if rec['score'] >= 70 else '#98792d' if rec['score'] >= 40 else '#a64e4a'};">
                                     {rec['score']}%
                                 </div>
                             </div>
                             <div style="margin-top: 0.5rem;">
-                                <div style="font-size: 0.82rem; color: #9aa0ae; margin-bottom: 0.25rem;">Matched Skills:</div>
-                                {match_tags if match_tags else '<span style="font-size: 0.82rem; color: #9aa0ae;">None</span>'}
+                                <div style="font-size: 0.82rem; color: #6b7b6c; margin-bottom: 0.25rem;">Matched Skills:</div>
+                                {match_tags if match_tags else '<span style="font-size: 0.82rem; color: #6b7b6c;">None</span>'}
                             </div>
                             <div style="margin-top: 0.5rem;">
-                                <div style="font-size: 0.82rem; color: #9aa0ae; margin-bottom: 0.25rem;">Skills to Learn:</div>
-                                {missing_tags if missing_tags else '<span style="font-size: 0.82rem; color: #34d399;">All matched!</span>'}
+                                <div style="font-size: 0.82rem; color: #6b7b6c; margin-bottom: 0.25rem;">Skills to Learn:</div>
+                                {missing_tags if missing_tags else '<span style="font-size: 0.82rem; color: #43835c;">All matched!</span>'}
                             </div>
                         </div>
                         """, unsafe_allow_html=True)
@@ -1384,7 +1364,7 @@ elif page == "📄  Resume Analyzer":
         # Show sample analysis prompt
         st.markdown("""
         <div class="info-card" style="text-align: center; margin-top: 2rem;">
-            <h4>📤 Upload Your Resume to Get Started</h4>
+            <h4>Upload Your Resume to Get Started</h4>
             <p>
                 We'll analyze your resume for ATS compatibility, extract your skills,
                 and match you with the best internship opportunities.
@@ -1399,11 +1379,11 @@ elif page == "📄  Resume Analyzer":
 # PAGE: Project Ideas
 # ============================================
 
-elif page == "💡  Project Ideas":
+elif page == "Project Ideas":
 
     st.markdown("""
     <div class="hero-container fade-in" style="padding: 1rem 0;">
-        <div class="hero-title" style="font-size: 2rem;">💡 Project Ideas</div>
+        <div class="hero-title" style="font-size: 2rem;">Project Ideas</div>
         <div class="hero-subtitle" style="font-size: 0.95rem;">
             Explore portfolio-worthy project ideas to strengthen your resume and GitHub profile.
         </div>
@@ -1420,11 +1400,11 @@ elif page == "💡  Project Ideas":
 
         with col1:
             domains = ["All"] + sorted(df["domain"].unique().tolist())
-            selected_domain = st.selectbox("🔬 Domain", domains)
+            selected_domain = st.selectbox("Domain", domains)
 
         with col2:
             difficulties = ["All"] + sorted(df["difficulty"].unique().tolist())
-            selected_diff = st.selectbox("📊 Difficulty", difficulties)
+            selected_diff = st.selectbox("Difficulty", difficulties)
 
         # Apply filters
         filtered = df.copy()
@@ -1436,11 +1416,11 @@ elif page == "💡  Project Ideas":
             filtered = filtered[filtered["difficulty"] == selected_diff]
 
         st.markdown(f"<br>", unsafe_allow_html=True)
-        st.markdown(f"### 💡 {len(filtered)} Project Ideas")
+        st.markdown(f"### {len(filtered)} Project Ideas")
 
         for _, proj in filtered.iterrows():
             diff = proj.get("difficulty", "N/A")
-            diff_color = "#34d399" if diff == "Easy" else "#fbbf24" if diff == "Medium" else "#f87171"
+            diff_color = "#43835c" if diff == "Easy" else "#98792d" if diff == "Medium" else "#a64e4a"
 
             skills_list = proj.get("skills", "")
             tags_html = ""
@@ -1453,14 +1433,14 @@ elif page == "💡  Project Ideas":
                 <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                     <div>
                         <h4 style="margin: 0 0 0.5rem 0;">{proj.get('project', 'N/A')}</h4>
-                        <span style="font-size: 0.82rem; color: #9aa0ae;">🔬 {proj.get('domain', 'N/A')}</span>
+                        <span style="font-size: 0.82rem; color: #6b7b6c;">{proj.get('domain', 'N/A')}</span>
                     </div>
                     <div style="display: inline-block; background: {diff_color}15; color: {diff_color}; border: 1px solid {diff_color}40; border-radius: 9999px; padding: 0.3rem 1rem; font-size: 0.82rem; font-weight: 700;">
                         {diff}
                     </div>
                 </div>
                 <div style="margin-top: 0.75rem;">
-                    <div style="font-size: 0.82rem; color: #9aa0ae; margin-bottom: 0.25rem;">Required Skills:</div>
+                    <div style="font-size: 0.82rem; color: #6b7b6c; margin-bottom: 0.25rem;">Required Skills:</div>
                     {tags_html}
                 </div>
             </div>
@@ -1474,11 +1454,11 @@ elif page == "💡  Project Ideas":
 # PAGE: Skills Dashboard
 # ============================================
 
-elif page == "📊  Skills Dashboard":
+elif page == "Skills Dashboard":
 
     st.markdown("""
     <div class="hero-container fade-in" style="padding: 1rem 0;">
-        <div class="hero-title" style="font-size: 2rem;">📊 Skills Dashboard</div>
+        <div class="hero-title" style="font-size: 2rem;">Skills Dashboard</div>
         <div class="hero-subtitle" style="font-size: 0.95rem;">
             Explore in-demand skills across categories and plan your learning journey.
         </div>
@@ -1494,32 +1474,32 @@ elif page == "📊  Skills Dashboard":
         col1, col2, col3 = st.columns(3)
 
         with col1:
-            st.metric("📚 Total Skills", str(len(df)))
+            st.metric("Total Skills", str(len(df)))
         with col2:
-            st.metric("📂 Categories", str(df["category"].nunique()))
+            st.metric("Categories", str(df["category"].nunique()))
         with col3:
             easy_count = len(df[df["difficulty"] == "Easy"])
-            st.metric("🟢 Beginner-Friendly", str(easy_count))
+            st.metric("Beginner-Friendly", str(easy_count))
 
         st.markdown("<br>", unsafe_allow_html=True)
 
         # Skills by category
-        st.markdown("### 🗂️ Skills by Category")
+        st.markdown("### Skills by Category")
 
         categories = df["category"].unique()
 
         for cat in sorted(categories):
             cat_skills = df[df["category"] == cat]
 
-            with st.expander(f"📂 {cat} ({len(cat_skills)} skills)", expanded=False):
+            with st.expander(f"{cat} ({len(cat_skills)} skills)", expanded=False):
                 for _, skill in cat_skills.iterrows():
                     diff = skill.get("difficulty", "N/A")
-                    diff_color = "#34d399" if diff == "Easy" else "#fbbf24" if diff == "Medium" else "#f87171"
+                    diff_color = "#43835c" if diff == "Easy" else "#98792d" if diff == "Medium" else "#a64e4a"
 
                     st.markdown(f"""
                     <div style="display: flex; justify-content: space-between; align-items: center;
-                                padding: 0.6rem 0; border-bottom: 1px solid #e0efff;">
-                        <span style="font-weight: 600; color: #374151; font-family: 'Inter', sans-serif;">
+                                padding: 0.6rem 0; border-bottom: 1px solid #c6d3bf;">
+                        <span style="font-weight: 600; color: #526553; font-family: 'DM Sans', sans-serif;">
                             {skill.get('skill', 'N/A')}
                         </span>
                         <span style="display: inline-block; background: {diff_color}15; color: {diff_color};
@@ -1531,34 +1511,34 @@ elif page == "📊  Skills Dashboard":
 
         # Distribution chart
         st.markdown("<br>", unsafe_allow_html=True)
-        st.markdown("### 📊 Difficulty Distribution")
+        st.markdown("### Difficulty Distribution")
 
         diff_counts = df["difficulty"].value_counts()
 
-        colors_map = {"Easy": "#34d399", "Medium": "#fbbf24", "Hard": "#f87171"}
-        colors = [colors_map.get(d, "#6b7280") for d in diff_counts.index]
+        colors_map = {"Easy": "#43835c", "Medium": "#98792d", "Hard": "#a64e4a"}
+        colors = [colors_map.get(d, "#6b7b6c") for d in diff_counts.index]
 
         fig = go.Figure(data=[go.Pie(
             labels=diff_counts.index,
             values=diff_counts.values,
-            marker=dict(colors=colors, line=dict(color="white", width=3)),
+            marker=dict(colors=colors, line=dict(color="#f8f6e9", width=3)),
             textinfo="label+percent",
-            textfont=dict(family="Inter", size=14),
+            textfont=dict(family="DM Sans", size=14),
             hole=0.45,
         )])
 
         fig.update_layout(
             height=350,
             paper_bgcolor="rgba(0,0,0,0)",
-            font={"family": "Inter", "color": "#374151"},
+            font={"family": "DM Sans", "color": "#526553"},
             showlegend=True,
             legend=dict(orientation="h", yanchor="bottom", y=-0.1, xanchor="center", x=0.5),
             margin=dict(l=20, r=20, t=20, b=40),
         )
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(style_chart(fig), use_container_width=True)
 
         # Category chart
-        st.markdown("### 📊 Skills per Category")
+        st.markdown("### Skills per Category")
 
         cat_counts = df["category"].value_counts()
 
@@ -1567,20 +1547,20 @@ elif page == "📊  Skills Dashboard":
             y=cat_counts.values,
             labels={"x": "Category", "y": "Number of Skills"},
             color=cat_counts.values,
-            color_continuous_scale=["#b8daff", "#4a94e8", "#265ea3"],
+            color_continuous_scale=["#d5e4c9", "#8eaf80", "#527957"],
         )
         fig2.update_layout(
             height=350,
             paper_bgcolor="rgba(0,0,0,0)",
             plot_bgcolor="rgba(0,0,0,0)",
-            font={"family": "Inter", "color": "#374151"},
+            font={"family": "DM Sans", "color": "#526553"},
             showlegend=False,
             coloraxis_showscale=False,
-            xaxis={"gridcolor": "#e0efff"},
-            yaxis={"gridcolor": "#e0efff"},
+            xaxis={"gridcolor": "#dfe7d8"},
+            yaxis={"gridcolor": "#dfe7d8"},
             margin=dict(l=10, r=10, t=20, b=10),
         )
-        st.plotly_chart(fig2, use_container_width=True)
+        st.plotly_chart(style_chart(fig2), use_container_width=True)
 
     else:
         st.info("Skills database not found. Please ensure `database/skills.csv` exists.")
